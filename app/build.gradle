@@ -81,6 +81,10 @@ android {
 
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -94,7 +98,46 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'org.web3j:core-android:2.2.1'
+    //compile 'org.web3j:core-android:2.2.1'
+    /*
+    compile files ('web3j-3.2.0-jars/abi-3.2.0.jar')
+    compile files ('web3j-3.2.0-jars/base-3.2.0.jar')
+    compile files ('web3j-3.2.0-jars/codegen-3.2.0.jar')
+    compile files ('web3j-3.2.0-jars/console-3.2.0.jar')
+    compile files ('web3j-3.2.0-jars/core-3.2.0.jar')
+    compile files ('web3j-3.2.0-jars/crypto-3.2.0.jar')
+    compile files ('web3j-3.2.0-jars/infura-3.2.0.jar')
+    compile files ('web3j-3.2.0-jars/rlp-3.2.0.jar')
+    compile files ('web3j-3.2.0-jars/tuples-3.2.0.jar')
+    compile files ('web3j-3.2.0-jars/utils-3.2.0.jar')
+
+    compile files ('web3j-3.2.0-jars/abi-3.0.0-android.jar')
+    compile files ('web3j-3.2.0-jars/base-3.0.0-android.jar')
+    compile files ('web3j-3.2.0-jars/codegen-3.0.0-android.jar')
+    compile files ('web3j-3.2.0-jars/console-3.0.0-android.jar')
+    compile files ('web3j-3.2.0-jars/core-3.0.0-android.jar')
+    compile files ('web3j-3.2.0-jars/crypto-3.0.0-android.jar')
+    compile files ('web3j-3.2.0-jars/infura-3.0.0-android.jar')
+    compile files ('web3j-3.2.0-jars/rlp-3.0.0-android.jar')
+    compile files ('web3j-3.2.0-jars/tuples-3.0.0-android.jar')
+    compile files ('web3j-3.2.0-jars/utils-3.0.0-android.jar')
+*/
+
+    compile "com.madgag.spongycastle:prov:1.54.0.0"
+    compile "org.slf4j:slf4j-api:1.7.25"
+     compile 'com.fasterxml.jackson.core:jackson-core:2.8.5'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.5'
+    compile "com.fasterxml.jackson.core:jackson-databind:2.8.5"
+    compile "io.reactivex:rxjava:1.2.4"
+    compile "com.github.jnr:jnr-unixsocket:0.15"
+    compile "com.squareup.okhttp3:okhttp:3.8.1"
+    compile "com.squareup.okhttp3:logging-interceptor:3.8.1"
+    //classpath 'io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3'
+    //classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+
+    //compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
+    //        "org.slf4j:slf4j-api:$slf4jVersion"
+    //compile ('org.web3j:core:3.1.1-android')
     googleplayCompile 'com.google.android.gms:play-services-analytics:11.0.4'
     googleplayCompile 'com.google.android.gms:play-services-ads:11.0.4'
     compile 'me.zhanghai.android.patternlock:library:2.1.2'

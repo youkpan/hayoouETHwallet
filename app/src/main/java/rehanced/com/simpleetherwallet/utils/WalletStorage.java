@@ -180,7 +180,7 @@ public class WalletStorage {
                 if(! BuildConfig.DEBUG)
                     toImport.get(i).delete();
                 WalletStorage.getInstance(c).add(new FullWallet("0x" + address, address), c);
-                AddressNameConverter.getInstance(c).put("0x" + address, "Wallet " + ("0x" + address).substring(0, 6), c);
+                AddressNameConverter.getInstance(c).put("0x" + address, "钱包 " + ("0x" + address).substring(0, 6), c);
 
                 Intent mediaScannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 Uri fileContentUri = Uri.fromFile(toImport.get(i)); // With 'permFile' being the File object

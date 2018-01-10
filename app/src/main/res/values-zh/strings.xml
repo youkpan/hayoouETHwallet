@@ -18,7 +18,7 @@
     <string name ="drawer_donate">转账测试</string>
 
     <string name ="fr_price_current_price">当前价格</string>
-    <string name ="fr_wallet_overall_balance">整体平衡</string>
+    <string name ="fr_wallet_overall_balance">帐户余额</string>
     <string name ="fr_detail_acc_balance">帐户余额</string>
 
     <string name ="main_ac_wallet_added_suc">您的钱包已成功添加</string>
@@ -187,7 +187,7 @@
         <string name ="dialog_no_wallets">没有钱包</string>
         <string name ="dialog_no_wallets_text">为了申请资金，您需要一个钱包或手表专用地址。</string>
         <string name="dialog_no_wallets_found">找不到钱包</string>
-        <string name ="dialog_no_wallets_found_text">请将您要导入的钱包放入哈友区块链文件夹中，并确保其名称正确。从Mist或其他桌面客户端导入时，您不必重命名您的钱包。</string>
+        <string name ="dialog_no_wallets_found_text">请将您要导入的钱包放入哈友区块链文件夹(/sdcard/HayoouETH/)中，并确保其名称正确。从Mist或其他桌面客户端导入时，您不必重命名您的钱包。</string>
         <string name ="notification_ticker">传入以太网交易... </string>
         <string name ="notification_transfersuc">传输成功</string>
 
