@@ -1,11 +1,10 @@
 package org.web3j.protocol.core.filters;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthLog;
 
@@ -34,18 +33,6 @@ public class PendingTransactionFilter extends Filter<String> {
                         "Unexpected result type: " + logResult.get() + ", required Hash");
             }
         }
-    }
-
-    /**
-     * Since the pending transaction filter does not support historic filters,
-     * the filterId is ignored and an empty optional is returned
-     * @param filterId
-     * Id of the filter for which the historic log should be retrieved
-     * @return null
-     */
-    @Override
-    protected Request<?, EthLog> getFilterLogs(BigInteger filterId) {
-        return null;
     }
 }
 

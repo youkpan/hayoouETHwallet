@@ -1,5 +1,6 @@
 package org.web3j.crypto;
 
+
 import java.io.IOException;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -62,44 +63,6 @@ public class WalletFile {
         this.version = version;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof WalletFile)) {
-            return false;
-        }
-        
-        WalletFile that = (WalletFile) o;
-        
-        if (getAddress() != null 
-                ? !getAddress().equals(that.getAddress())
-                : that.getAddress() != null) {
-            return false;
-        }
-        if (getCrypto() != null 
-                ? !getCrypto().equals(that.getCrypto())
-                : that.getCrypto() != null) {
-            return false;
-        } 
-        if (getId() != null 
-                ? !getId().equals(that.getId())
-                : that.getId() != null) {
-            return false;
-        }
-        return version == that.version;
-    } 
-
-    @Override
-    public int hashCode() {
-        int result = getAddress() != null ? getAddress().hashCode() : 0;
-        result = 31 * result + (getCrypto() != null ? getCrypto().hashCode() : 0);
-        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
-        result = 31 * result + version;
-        return result;
-    }  
-
     public static class Crypto {
         private String cipher;
         private String ciphertext;
@@ -150,15 +113,15 @@ public class WalletFile {
         }
 
         @JsonTypeInfo(
-                use = JsonTypeInfo.Id.NAME,
-                include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
-                property = "kdf")
+                use=JsonTypeInfo.Id.NAME,
+                include=JsonTypeInfo.As.EXTERNAL_PROPERTY,
+                property="kdf")
         @JsonSubTypes({
                 @JsonSubTypes.Type(value = Aes128CtrKdfParams.class, name = Wallet.AES_128_CTR),
                 @JsonSubTypes.Type(value = ScryptKdfParams.class, name = Wallet.SCRYPT)
         })
         // To support my Ether Wallet keys uncomment this annotation & comment out the above
-        //  @JsonDeserialize(using = KdfParamsDeserialiser.class)
+//        @JsonDeserialize(using = KdfParamsDeserialiser.class)
         // Also add the following to the ObjectMapperFactory
         // objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
         public void setKdfparams(KdfParams kdfparams) {
@@ -172,58 +135,6 @@ public class WalletFile {
         public void setMac(String mac) {
             this.mac = mac;
         }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (!(o instanceof Crypto)) {
-                return false;
-            }
-            
-            Crypto that = (Crypto) o;
-            
-            if (getCipher() != null
-                    ? !getCipher().equals(that.getCipher())
-                    : that.getCipher() != null) {
-                return false;
-            }
-            if (getCiphertext() != null
-                    ? !getCiphertext().equals(that.getCiphertext())
-                    : that.getCiphertext() != null) {
-                return false;
-            }
-            if (getCipherparams() != null
-                    ? !getCipherparams().equals(that.getCipherparams())
-                    : that.getCipherparams() != null) {
-                return false;
-            }
-            if (getKdf() != null
-                    ? !getKdf().equals(that.getKdf())
-                    : that.getKdf() != null) {
-                return false;
-            }
-            if (getKdfparams() != null
-                    ? !getKdfparams().equals(that.getKdfparams())
-                    : that.getKdfparams() != null) {
-                return false;
-            }
-            return getMac() != null
-                    ? getMac().equals(that.getMac()) : that.getMac() == null;
-        }  
-
-        @Override
-        public int hashCode() {
-            int result = getCipher() != null ? getCipher().hashCode() : 0;
-            result = 31 * result + (getCiphertext() != null ? getCiphertext().hashCode() : 0);
-            result = 31 * result + (getCipherparams() != null ? getCipherparams().hashCode() : 0);
-            result = 31 * result + (getKdf() != null ? getKdf().hashCode() : 0);
-            result = 31 * result + (getKdfparams() != null ? getKdfparams().hashCode() : 0);
-            result = 31 * result + (getMac() != null ? getMac().hashCode() : 0);
-            return result;
-        }
-        
     }
 
     public static class CipherParams {
@@ -239,33 +150,10 @@ public class WalletFile {
         public void setIv(String iv) {
             this.iv = iv;
         }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (!(o instanceof CipherParams)) {
-                return false;
-            }
-            
-            CipherParams that = (CipherParams) o;
-            
-            return getIv() != null
-                    ? getIv().equals(that.getIv()) : that.getIv() == null;
-        }  
-
-        @Override
-        public int hashCode() {
-            int result = getIv() != null ? getIv().hashCode() : 0;
-            return result;
-        }      
-        
     }
 
     interface KdfParams {
         int getDklen();
-
         String getSalt();
     }
 
@@ -309,41 +197,6 @@ public class WalletFile {
         public void setSalt(String salt) {
             this.salt = salt;
         }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (!(o instanceof Aes128CtrKdfParams)) {
-                return false;
-            }
-            
-            Aes128CtrKdfParams that = (Aes128CtrKdfParams) o;
-            
-            if (dklen != that.dklen) {
-                return false;
-            }
-            if (c != that.c) {
-                return false;
-            }
-            if (getPrf() != null
-                    ? !getPrf().equals(that.getPrf())
-                    : that.getPrf() != null) {
-                return false;
-            }
-            return getSalt() != null
-                ? getSalt().equals(that.getSalt()) : that.getSalt() == null;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = dklen;
-            result = 31 * result + c;
-            result = 31 * result + (getPrf() != null ? getPrf().hashCode() : 0);
-            result = 31 * result + (getSalt() != null ? getSalt().hashCode() : 0);
-            return result;
-        }        
     }
 
     public static class ScryptKdfParams implements KdfParams {
@@ -395,43 +248,6 @@ public class WalletFile {
         public void setSalt(String salt) {
             this.salt = salt;
         }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (!(o instanceof ScryptKdfParams)) {
-                return false;
-            }
-            
-            ScryptKdfParams that = (ScryptKdfParams) o;
-            
-            if (dklen != that.dklen) {
-                return false;
-            }
-            if (n != that.n) {
-                return false;
-            }
-            if (p != that.p) {
-                return false;
-            }
-            if (r != that.r) {
-                return false;
-            }
-            return getSalt() != null
-                ? getSalt().equals(that.getSalt()) : that.getSalt() == null;
-        }  
-
-        @Override
-        public int hashCode() {
-            int result = dklen;
-            result = 31 * result + n;
-            result = 31 * result + p;
-            result = 31 * result + r;
-            result = 31 * result + (getSalt() != null ? getSalt().hashCode() : 0);
-            return result;
-        }     
     }
 
     // If we need to work with MyEtherWallet we'll need to use this deserializer, see the

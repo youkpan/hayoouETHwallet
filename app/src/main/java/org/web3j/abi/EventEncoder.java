@@ -2,6 +2,7 @@ package org.web3j.abi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Type;
@@ -38,7 +39,6 @@ public class EventEncoder {
         StringBuilder result = new StringBuilder();
         result.append(methodName);
         result.append("(");
-
         String params = "";
         for (int i = 0; i < parameters.size(); i++) {
             TypeReference<T> typeReference = parameters.get(i);
@@ -48,7 +48,6 @@ public class EventEncoder {
                 params += ",";
             }
         }
-
         result.append(params);
         result.append(")");
         return result.toString();

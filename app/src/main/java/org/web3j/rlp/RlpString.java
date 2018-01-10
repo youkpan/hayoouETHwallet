@@ -3,6 +3,8 @@ package org.web3j.rlp;
 import java.math.BigInteger;
 import java.util.Arrays;
 
+import org.web3j.utils.Bytes;
+
 /**
  * RLP string type.
  */
@@ -41,26 +43,19 @@ public class RlpString implements RlpType {
         }
     }
 
-    public static RlpString create(long value) {
-        return create(BigInteger.valueOf(value));
-    }
-
     public static RlpString create(String value) {
         return new RlpString(value.getBytes());
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         RlpString rlpString = (RlpString) o;
 
         return Arrays.equals(value, rlpString.value);
+
     }
 
     @Override

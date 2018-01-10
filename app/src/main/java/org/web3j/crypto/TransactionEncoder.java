@@ -1,13 +1,14 @@
 package org.web3j.crypto;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.rlp.RlpEncoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
-import org.web3j.utils.Bytes;
 import org.web3j.utils.Numeric;
 
 /**
@@ -60,7 +61,7 @@ public class TransactionEncoder {
 
     static List<RlpType> asRlpValues(
             RawTransaction rawTransaction, Sign.SignatureData signatureData) {
-        List<RlpType> result = new ArrayList<RlpType>();
+        List<RlpType> result = new ArrayList<>();
 
         result.add(RlpString.create(rawTransaction.getNonce()));
         result.add(RlpString.create(rawTransaction.getGasPrice()));
@@ -69,8 +70,7 @@ public class TransactionEncoder {
         // an empty to address (contract creation) should not be encoded as a numeric 0 value
         String to = rawTransaction.getTo();
         if (to != null && to.length() > 0) {
-            // addresses that start with zeros should be encoded with the zeros included, not
-            // as numeric values
+            //result.add(RlpString.create(Numeric.toBigInt(to)));
             result.add(RlpString.create(Numeric.hexStringToByteArray(to)));
         } else {
             result.add(RlpString.create(""));
@@ -83,9 +83,9 @@ public class TransactionEncoder {
         result.add(RlpString.create(data));
 
         if (signatureData != null) {
-            result.add(RlpString.create(signatureData.getV()));
-            result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getR())));
-            result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getS())));
+            result.add(RlpString.create(  BigInteger.valueOf(signatureData.getV())));
+						result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getR())));
+						result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getS())));
         }
 
         return result;

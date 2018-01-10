@@ -3,6 +3,7 @@ package org.web3j.abi;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.StaticArray;
@@ -75,7 +76,6 @@ public class FunctionEncoder {
         StringBuilder result = new StringBuilder();
         result.append(methodName);
         result.append("(");
-
         List<String> types = new ArrayList<String>(parameters.size());
         String params = "";
 
@@ -89,7 +89,6 @@ public class FunctionEncoder {
 
             types.add(type.getTypeAsString());
         }
-
         result.append(params);
         result.append(")");
         return result.toString();

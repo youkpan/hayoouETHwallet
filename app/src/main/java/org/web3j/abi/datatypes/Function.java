@@ -7,7 +7,7 @@ import org.web3j.abi.TypeReference;
 import static org.web3j.abi.Utils.convert;
 
 /**
- * Function type.
+ * Function wrapper
  */
 public class Function {
     private String name;

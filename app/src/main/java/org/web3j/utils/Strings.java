@@ -1,7 +1,5 @@
 package org.web3j.utils;
 
-import android.text.TextUtils;
-
 import java.util.List;
 
 /**
@@ -12,13 +10,18 @@ public class Strings {
     private Strings() {}
 
     public static String toCsv(List<String> src) {
-        // return src == null ? null : String.join(", ", src.toArray(new String[0]));
         return join(src, ", ");
     }
 
     public static String join(List<String> src, String delimiter) {
-
-        return src == null ? null : TextUtils.join(delimiter, src.toArray(new String[0]));
+        String result = "";
+        for (int i = 0; i < src.size(); i++) {
+            result += src.get(i);
+            if (i + 1 < src.size()) {
+                result += delimiter;
+            }
+        }
+        return result;
     }
 
     public static String capitaliseFirstLetter(String string) {
@@ -43,9 +46,5 @@ public class Strings {
 
     public static String repeat(char value, int n) {
         return new String(new char[n]).replace("\0", String.valueOf(value));
-    }
-
-    public static boolean isEmpty(String s) {
-        return s == null || s.length() == 0;
     }
 }

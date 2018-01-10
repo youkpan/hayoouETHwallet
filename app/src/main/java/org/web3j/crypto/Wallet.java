@@ -1,10 +1,10 @@
 package org.web3j.crypto;
 
-import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.UUID;
 import javax.crypto.BadPaddingException;
@@ -14,14 +14,14 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.spongycastle.crypto.digests.SHA256Digest;
-import org.spongycastle.crypto.generators.PKCS5S2ParametersGenerator;
-import org.spongycastle.crypto.generators.SCrypt;
-import org.spongycastle.crypto.params.KeyParameter;
+import com.lambdaworks.crypto.SCrypt;
+import org.bouncycastle.crypto.digests.SHA256Digest;
+import org.bouncycastle.crypto.generators.PKCS5S2ParametersGenerator;
+import org.bouncycastle.crypto.params.KeyParameter;
 
 import org.web3j.utils.Numeric;
 
-import static org.web3j.crypto.SecureRandomUtils.secureRandom;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * <p>Ethereum wallet file management. For reference, refer to
@@ -31,11 +31,8 @@ import static org.web3j.crypto.SecureRandomUtils.secureRandom;
  * Go Ethereum client implementation</a>.</p>
  *
  * <p><strong>Note:</strong> we don't use the Bouncy Castle Scrypt implementation
- * {@link org.spongycastle.crypto.generators.SCrypt}, as the following parameter assertion results
+ * {@link org.bouncycastle.crypto.generators.SCrypt}, as the following parameter assertion results
  * in failure of the Ethereum reference
- * <p><strong>Note:</strong> the Bouncy Castle Scrypt implementation
- * {@link SCrypt}, fails to comply with the following
- * Ethereum reference
  * <a href="https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition#scrypt">
  * Scrypt test vector</a>:</p>
  *
@@ -50,6 +47,8 @@ import static org.web3j.crypto.SecureRandomUtils.secureRandom;
  * </pre>
  */
 public class Wallet {
+
+    private static SecureRandom SECURE_RANDOM = new SecureRandom();
 
     private static final int N_LIGHT = 1 << 12;
     private static final int P_LIGHT = 6;
@@ -72,7 +71,7 @@ public class Wallet {
         byte[] salt = generateRandomBytes(32);
 
         byte[] derivedKey = generateDerivedScryptKey(
-                password.getBytes(Charset.forName("UTF-8")), salt, n, R, p, DKLEN);
+                password.getBytes(UTF_8), salt, n, R, p, DKLEN);
 
         byte[] encryptKey = Arrays.copyOfRange(derivedKey, 0, 16);
         byte[] iv = generateRandomBytes(16);
@@ -133,7 +132,11 @@ public class Wallet {
 
     private static byte[] generateDerivedScryptKey(
             byte[] password, byte[] salt, int n, int r, int p, int dkLen) throws CipherException {
-        return SCrypt.generate(password, salt, n, r, p, dkLen);
+        try {
+            return SCrypt.scrypt(password, salt, n, r, p, dkLen);
+        } catch (GeneralSecurityException e) {
+            throw new CipherException(e);
+        }
     }
 
     private static byte[] generateAes128CtrDerivedKey(
@@ -161,23 +164,11 @@ public class Wallet {
             SecretKeySpec secretKeySpec = new SecretKeySpec(encryptKey, "AES");
             cipher.init(mode, secretKeySpec, ivParameterSpec);
             return cipher.doFinal(text);
-        } catch (NoSuchPaddingException e) {
-            return throwCipherException(e);
-        } catch (NoSuchAlgorithmException e) {
-            return throwCipherException(e);
-        } catch (InvalidAlgorithmParameterException e) {
-            return throwCipherException(e);
-        } catch (InvalidKeyException e) {
-            return throwCipherException(e);
-        } catch (BadPaddingException e) {
-            return throwCipherException(e);
-        } catch (IllegalBlockSizeException e) {
-            return throwCipherException(e);
+        } catch (NoSuchPaddingException|NoSuchAlgorithmException|
+                InvalidAlgorithmParameterException|InvalidKeyException|
+                BadPaddingException|IllegalBlockSizeException e) {
+            throw new CipherException("Error performing cipher operation", e);
         }
-    }
-
-    private static byte[] throwCipherException(Exception e) throws CipherException {
-        throw new CipherException("Error performing cipher operation", e);
     }
 
     private static byte[] generateMac(byte[] derivedKey, byte[] cipherText) {
@@ -211,8 +202,7 @@ public class Wallet {
             int p = scryptKdfParams.getP();
             int r = scryptKdfParams.getR();
             byte[] salt = Numeric.hexStringToByteArray(scryptKdfParams.getSalt());
-            derivedKey = generateDerivedScryptKey(
-                    password.getBytes(Charset.forName("UTF-8")), salt, n, r, p, dklen);
+            derivedKey = generateDerivedScryptKey(password.getBytes(UTF_8), salt, n, r, p, dklen);
         } else if (kdfParams instanceof WalletFile.Aes128CtrKdfParams) {
             WalletFile.Aes128CtrKdfParams aes128CtrKdfParams =
                     (WalletFile.Aes128CtrKdfParams) crypto.getKdfparams();
@@ -220,8 +210,7 @@ public class Wallet {
             String prf = aes128CtrKdfParams.getPrf();
             byte[] salt = Numeric.hexStringToByteArray(aes128CtrKdfParams.getSalt());
 
-            derivedKey = generateAes128CtrDerivedKey(
-                    password.getBytes(Charset.forName("UTF-8")), salt, c, prf);
+            derivedKey = generateAes128CtrDerivedKey(password.getBytes(UTF_8), salt, c, prf);
         } else {
             throw new CipherException("Unable to deserialize params: " + crypto.getKdf());
         }
@@ -255,7 +244,7 @@ public class Wallet {
 
     static byte[] generateRandomBytes(int size) {
         byte[] bytes = new byte[size];
-        secureRandom().nextBytes(bytes);
+        SECURE_RANDOM.nextBytes(bytes);
         return bytes;
     }
 }

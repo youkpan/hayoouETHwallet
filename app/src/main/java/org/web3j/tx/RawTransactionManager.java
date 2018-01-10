@@ -2,19 +2,19 @@ package org.web3j.tx;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.concurrent.ExecutionException;
 
 import org.web3j.crypto.Credentials;
-import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Numeric;
 
 /**
- * TransactionManager implementation using Ethereum wallet file to create and sign transactions
+ * <p>TransactionManager implementation using Ethereum wallet file to create and sign transactions
  * locally.
  *
  * <p>This transaction manager provides support for specifying the chain id for transactions as per
@@ -29,7 +29,6 @@ public class RawTransactionManager extends TransactionManager {
 
     public RawTransactionManager(Web3j web3j, Credentials credentials, byte chainId) {
         super(web3j);
-
         this.web3j = web3j;
         this.credentials = credentials;
 
@@ -37,20 +36,8 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     public RawTransactionManager(
-            Web3j web3j, Credentials credentials, byte chainId,
-            TransactionReceiptProcessor transactionReceiptProcessor) {
-        super(transactionReceiptProcessor);
-
-        this.web3j = web3j;
-        this.credentials = credentials;
-
-        this.chainId = chainId;
-    }
-
-    public RawTransactionManager(
-            Web3j web3j, Credentials credentials, byte chainId, int attempts, long sleepDuration) {
+            Web3j web3j, Credentials credentials, byte chainId, int attempts, int sleepDuration) {
         super(web3j, attempts, sleepDuration);
-
         this.web3j = web3j;
         this.credentials = credentials;
 

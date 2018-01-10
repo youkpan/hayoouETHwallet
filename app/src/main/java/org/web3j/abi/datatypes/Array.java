@@ -10,9 +10,8 @@ import java.util.List;
 public abstract class Array<T extends Type> implements Type<List<T>> {
 
     private String type;
-    protected final List<T> value;
+    private List<T> value;
 
-    @SafeVarargs
     Array(String type, T... values) {
         if (!valid(values, type)) {
             throw new UnsupportedOperationException(
@@ -58,18 +57,12 @@ public abstract class Array<T extends Type> implements Type<List<T>> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Array<?> array = (Array<?>) o;
 
-        if (!type.equals(array.type)) {
-            return false;
-        }
+        if (!type.equals(array.type)) return false;
         return value != null ? value.equals(array.value) : array.value == null;
 
     }

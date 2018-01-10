@@ -1,8 +1,8 @@
 package org.web3j.abi;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,6 @@ import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.abi.datatypes.generated.Uint160;
 import org.web3j.utils.Numeric;
 
 /**
@@ -32,7 +31,7 @@ import org.web3j.utils.Numeric;
  * <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
  * </p>
  */
-public class TypeDecoder {
+class TypeDecoder {
 
     static final int MAX_BYTE_LENGTH_FOR_HEX_STRING = Type.MAX_BYTE_LENGTH << 1;
 
@@ -52,8 +51,6 @@ public class TypeDecoder {
     static <T extends Type> T decode(String input, int offset, Class<T> type) {
         if (NumericType.class.isAssignableFrom(type)) {
             return (T) decodeNumeric(input.substring(offset), (Class<NumericType>) type);
-        } else if (Address.class.isAssignableFrom(type)) {
-            return (T) decodeAddress(input.substring(offset));
         } else if (Bool.class.isAssignableFrom(type)) {
             return (T) decodeBool(input, offset);
         } else if (Bytes.class.isAssignableFrom(type)) {
@@ -88,11 +85,7 @@ public class TypeDecoder {
         return decode(input, 0, type);
     }
 
-    static Address decodeAddress(String input) {
-        return new Address(decodeNumeric(input, Uint160.class));
-    }
-
-    static <T extends NumericType> T decodeNumeric(String input, Class<T> type) {
+    static <T extends NumericType> T decodeNumeric(String input, Class<T> type) throws UnsupportedOperationException {
         try {
             byte[] inputByteArray = Numeric.hexStringToByteArray(input);
             int typeLengthAsBytes = getTypeLengthInBytes(type);
@@ -124,8 +117,7 @@ public class TypeDecoder {
         }
     }
 
-    private static <T> T throwUnsupportedOperation(Exception e, Class<T> type)
-            throws UnsupportedOperationException {
+    private static <T> T throwUnsupportedOperation(Exception e, Class<T> type) throws UnsupportedOperationException {
         throw new UnsupportedOperationException(
                 "Unable to create instance of " + type.getName(), e);
     }
@@ -149,6 +141,8 @@ public class TypeDecoder {
                 String[] bitsCounts = splitName[1].split("x");
                 return Integer.parseInt(bitsCounts[0]) + Integer.parseInt(bitsCounts[1]);
             }
+        } else if (Address.class.isAssignableFrom(type)) {
+            return Address.LENGTH;
         }
         return Type.MAX_BIT_LENGTH;
     }
@@ -229,31 +223,6 @@ public class TypeDecoder {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T extends Type> T instantiateStaticArray(
-            TypeReference<T> typeReference, List<T> elements) {
-        try {
-            Class<List> listClass = List.class;
-            return typeReference.getClassType().getConstructor(listClass).newInstance(elements);
-        } catch (ClassNotFoundException e) {
-            //noinspection unchecked
-            return instantiateStaticArray(elements);
-        } catch (IllegalAccessException e) {
-            return instantiateStaticArray(elements);
-        } catch (InstantiationException e) {
-            return instantiateStaticArray(elements);
-        } catch (NoSuchMethodException e) {
-            return instantiateStaticArray(elements);
-        } catch (InvocationTargetException e) {
-            return instantiateStaticArray(elements);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <T extends Type> T instantiateStaticArray(List<T> elements) {
-        return (T) new StaticArray<T>(elements);
-    }
-
-    @SuppressWarnings("unchecked")
     static <T extends Type> T decodeDynamicArray(
             String input, int offset, TypeReference<T> typeReference) {
 
@@ -263,7 +232,6 @@ public class TypeDecoder {
         return decodeArrayElements(input, valueOffset, typeReference, length, true);
     }
 
-    @SuppressWarnings("unchecked")
     private static <T extends Type> T decodeArrayElements(
             String input, int offset, TypeReference<T> typeReference, int length,
             boolean isDynamic) {
@@ -278,8 +246,8 @@ public class TypeDecoder {
                 List<T> elements = new ArrayList<T>(length);
 
                 for (int i = 0, currOffset = offset;
-                        i < length;
-                        i++, currOffset += getSingleElementLength(input, currOffset, cls)
+                     i < length;
+                     i++, currOffset += getSingleElementLength(input, currOffset, cls)
                              * MAX_BYTE_LENGTH_FOR_HEX_STRING) {
                     T value = decode(input, currOffset, cls);
                     elements.add(value);
@@ -295,10 +263,9 @@ public class TypeDecoder {
                     }
                 } else {
                     if (elements.isEmpty()) {
-                        throw new UnsupportedOperationException(
-                                "Zero length fixed array is invalid type");
+                        throw new UnsupportedOperationException("Zero length fixed array is invalid type");
                     } else {
-                        return instantiateStaticArray(typeReference, elements);
+                        return (T) new StaticArray<T>(elements);
                     }
                 }
             }

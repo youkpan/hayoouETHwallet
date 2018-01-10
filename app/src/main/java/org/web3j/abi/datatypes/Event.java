@@ -1,5 +1,6 @@
 package org.web3j.abi.datatypes;
 
+
 import java.util.List;
 
 import org.web3j.abi.TypeReference;
@@ -7,7 +8,7 @@ import org.web3j.abi.TypeReference;
 import static org.web3j.abi.Utils.convert;
 
 /**
- * Event wrapper type.
+ * Event wrapper
  */
 public class Event {
     private String name;

@@ -27,20 +27,14 @@ public abstract class NumericType implements Type<BigInteger> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         NumericType that = (NumericType) o;
 
-        if (!type.equals(that.type)) {
-            return false;
-        }
-
+        if (!type.equals(that.type)) return false;
         return value != null ? value.equals(that.value) : that.value == null;
+
     }
 
     @Override

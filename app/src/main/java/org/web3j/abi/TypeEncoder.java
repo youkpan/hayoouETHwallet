@@ -1,9 +1,8 @@
 package org.web3j.abi;
 
 import java.math.BigInteger;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
-import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Array;
 import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.Bytes;
@@ -32,17 +31,14 @@ public class TypeEncoder {
     private TypeEncoder() { }
 
     static boolean isDynamic(Type parameter) {
-        return parameter instanceof DynamicBytes
-                || parameter instanceof Utf8String
-                || parameter instanceof DynamicArray;
+        return parameter instanceof DynamicBytes ||
+                parameter instanceof Utf8String ||
+                parameter instanceof DynamicArray;
     }
 
-    @SuppressWarnings("unchecked")
-    public static String encode(Type parameter) {
+    static String encode(Type parameter) {
         if (parameter instanceof NumericType) {
             return encodeNumeric(((NumericType) parameter));
-        } else if (parameter instanceof Address) {
-            return encodeAddress((Address) parameter);
         } else if (parameter instanceof Bool) {
             return encodeBool((Bool) parameter);
         } else if (parameter instanceof Bytes) {
@@ -59,10 +55,6 @@ public class TypeEncoder {
             throw new UnsupportedOperationException(
                     "Type cannot be encoded: " + parameter.getClass());
         }
-    }
-
-    static String encodeAddress(Address address) {
-        return encodeNumeric(address.toUint160());
     }
 
     static String encodeNumeric(NumericType numericType) {
@@ -94,9 +86,8 @@ public class TypeEncoder {
         BigInteger value = numericType.getValue();
         if (numericType instanceof Ufixed || numericType instanceof Uint) {
             if (value.bitLength() == MAX_BIT_LENGTH) {
-                // As BigInteger is signed, if we have a 256 bit value, the resultant byte array
-                // will contain a sign byte in it's MSB, which we should ignore for this unsigned
-                // integer type.
+                // As BigInteger is signed, if we have a 256 bit value, the resultant byte array will
+                // contain a sign byte in it's MSB, which we should ignore for this unsigned integer type.
                 byte[] byteArray = new byte[MAX_BYTE_LENGTH];
                 System.arraycopy(value.toByteArray(), 1, byteArray, 0, MAX_BYTE_LENGTH);
                 return byteArray;
@@ -141,7 +132,7 @@ public class TypeEncoder {
     }
 
     static String encodeString(Utf8String string) {
-        byte[] utfEncoded = string.getValue().getBytes(Charset.forName("UTF-8"));
+        byte[] utfEncoded = string.getValue().getBytes(StandardCharsets.UTF_8);
         return encodeDynamicBytes(new DynamicBytes(utfEncoded));
     }
 

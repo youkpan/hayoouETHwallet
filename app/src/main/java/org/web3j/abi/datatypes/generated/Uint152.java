@@ -4,10 +4,9 @@ import java.math.BigInteger;
 import org.web3j.abi.datatypes.Uint;
 
 /**
- * Auto generated code.
- * <p><strong>Do not modifiy!</strong>
- * <p>Please use org.web3j.codegen.AbiTypesGenerator in the 
- * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
+ * <p>Auto generated code.<br>
+ * <strong>Do not modifiy!</strong><br>
+ * Please use {@link org.web3j.codegen.AbiTypesGenerator} to update.</p>
  */
 public class Uint152 extends Uint {
     public static final Uint152 DEFAULT = new Uint152(BigInteger.ZERO);

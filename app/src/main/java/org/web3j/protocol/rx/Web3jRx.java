@@ -1,5 +1,7 @@
 package org.web3j.protocol.rx;
 
+import java.math.BigInteger;
+
 import rx.Observable;
 
 import org.web3j.protocol.core.DefaultBlockParameter;
@@ -25,7 +27,7 @@ public interface Web3jRx {
      * Create an Observable to emit block hashes.
      *
      * @return Observable that emits all new block hashes as new blocks are created on the
-     *         blockchain
+     * blockchain
      */
     Observable<String> ethBlockHashObservable();
 
@@ -77,22 +79,6 @@ public interface Web3jRx {
             boolean fullTransactionObjects);
 
     /**
-     * Create an Observable that emits all blocks from the blockchain contained within the
-     * requested range.
-     *
-     * @param startBlock block number to commence with
-     * @param endBlock block number to finish with
-     * @param fullTransactionObjects if true, provides transactions embedded in blocks, otherwise
-     *                               transaction hashes
-     * @param ascending if true, emits blocks in ascending order between range, otherwise
-     *                  in descending order
-     * @return Observable to emit these blocks
-     */
-    Observable<EthBlock> replayBlocksObservable(
-            DefaultBlockParameter startBlock, DefaultBlockParameter endBlock,
-            boolean fullTransactionObjects, boolean ascending);
-
-    /**
      * Create an Observable that emits all transactions from the blockchain contained within the
      * requested range.
      *
@@ -112,8 +98,8 @@ public interface Web3jRx {
      * {@link #catchUpToLatestAndSubscribeToNewBlocksObservable(DefaultBlockParameter, boolean)}.
      *
      * @param startBlock the block number we wish to request from
-     * @param fullTransactionObjects if we require full {@link Transaction} objects to be provided
-     *                              in the {@link EthBlock} responses
+     * @param fullTransactionObjects if we require full {@link Transaction} objects to be provided in
+     *                               the {@link EthBlock} responses
      * @param onCompleteObservable a subsequent Observable that we wish to run once we are caught
      *                             up with the latest block
      * @return Observable to emit all requested blocks
@@ -127,8 +113,8 @@ public interface Web3jRx {
      * current. Once it has emitted the most current block, onComplete is called.
      *
      * @param startBlock the block number we wish to request from
-     * @param fullTransactionObjects if we require full {@link Transaction} objects to be provided
-     *                               in the {@link EthBlock} responses
+     * @param fullTransactionObjects if we require full {@link Transaction} objects to be provided in
+     *                               the {@link EthBlock} responses
      * @return Observable to emit all requested blocks
      */
     Observable<EthBlock> catchUpToLatestBlockObservable(
@@ -150,8 +136,8 @@ public interface Web3jRx {
      * are created.
      *
      * @param startBlock the block number we wish to request from
-     * @param fullTransactionObjects if we require full {@link Transaction} objects to be provided
-     *                               in the {@link EthBlock} responses
+     * @param fullTransactionObjects if we require full {@link Transaction} objects to be provided in
+     *                               the {@link EthBlock} responses
      * @return Observable to emit all requested blocks and future
      */
     Observable<EthBlock> catchUpToLatestAndSubscribeToNewBlocksObservable(

@@ -1,7 +1,5 @@
 package org.web3j.protocol;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
@@ -12,30 +10,11 @@ import org.web3j.protocol.core.Response;
 import org.web3j.utils.Async;
 
 /**
- * Base service implementation.
+ * Base service implementation
  */
-public abstract class Service implements Web3jService {
+public abstract class Service implements Web3jService{
 
-    protected final ObjectMapper objectMapper;
-
-    public Service(boolean includeRawResponses) {
-        objectMapper = ObjectMapperFactory.getObjectMapper(includeRawResponses);
-    }
-
-    protected abstract InputStream performIO(String payload) throws IOException;
-
-    @Override
-    public <T extends Response> T send(
-            Request request, Class<T> responseType) throws IOException {
-        String payload = objectMapper.writeValueAsString(request);
-
-        InputStream result = performIO(payload);
-        if (result != null) {
-            return objectMapper.readValue(result, responseType);
-        } else {
-            return null;
-        }
-    }
+    protected final ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
 
     @Override
     public <T extends Response> Future<T> sendAsync(

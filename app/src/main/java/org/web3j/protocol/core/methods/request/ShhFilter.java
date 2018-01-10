@@ -16,7 +16,7 @@ public class ShhFilter extends Filter<ShhFilter> {
     }
 
     @Override
-    ShhFilter getThis() {
+    Filter getThis() {
         return this;
     }
 }

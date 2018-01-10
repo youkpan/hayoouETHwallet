@@ -4,12 +4,8 @@ import java.math.BigInteger;
 import java.security.KeyPair;
 import java.util.Arrays;
 
-import org.spongycastle.crypto.digests.SHA256Digest;
-import org.spongycastle.crypto.params.ECPrivateKeyParameters;
-import org.spongycastle.crypto.signers.ECDSASigner;
-import org.spongycastle.crypto.signers.HMacDSAKCalculator;
-import org.spongycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
-import org.spongycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
+import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
+import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 
 import org.web3j.utils.Numeric;
 
@@ -33,20 +29,6 @@ public class ECKeyPair {
         return publicKey;
     }
 
-    /**
-     * Sign a hash with the private key of this key pair.
-     * @param transactionHash   the hash to sign
-     * @return  An {@link ECDSASignature} of the hash
-     */
-    public ECDSASignature sign(byte[] transactionHash) {
-        ECDSASigner signer = new ECDSASigner(new HMacDSAKCalculator(new SHA256Digest()));
-
-        ECPrivateKeyParameters privKey = new ECPrivateKeyParameters(privateKey, Sign.CURVE);
-        signer.init(true, privKey);
-        BigInteger[] components = signer.generateSignature(transactionHash);
-
-        return new ECDSASignature(components[0], components[1]).toCanonicalised();
-    }
 
     public static ECKeyPair create(KeyPair keyPair) {
         BCECPrivateKey privateKey = (BCECPrivateKey) keyPair.getPrivate();
@@ -74,22 +56,15 @@ public class ECKeyPair {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         ECKeyPair ecKeyPair = (ECKeyPair) o;
 
-        if (privateKey != null
-                ? !privateKey.equals(ecKeyPair.privateKey) : ecKeyPair.privateKey != null) {
+        if (privateKey != null ? !privateKey.equals(ecKeyPair.privateKey) : ecKeyPair.privateKey != null)
             return false;
-        }
+        return publicKey != null ? publicKey.equals(ecKeyPair.publicKey) : ecKeyPair.publicKey == null;
 
-        return publicKey != null
-                ? publicKey.equals(ecKeyPair.publicKey) : ecKeyPair.publicKey == null;
     }
 
     @Override

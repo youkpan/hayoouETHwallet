@@ -4,18 +4,17 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 /**
- * Type wrapper to get around limitations of Java's type erasure.
- * This is so that we can pass around Typed {@link org.web3j.abi.datatypes.Array} types.
+ * <p>Type wrapper to get around limitations of Java's type erasure.<br>
+ * This is so that we can pass around Typed {@link org.web3j.abi.datatypes.Array} types.</p>
  *
  * <p>See <a href="http://gafter.blogspot.com.au/2006/12/super-type-tokens.html">this blog post</a>
- * for further details.
+ * for further details.</p>
  *
  * <p>It may make sense to switch to using Java's reflection
  * <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/reflect/Type.html">Type</a> to
- * avoid working around this fundamental generics limitation.
+ * avoid working around this fundamental generics limitation.</p>
  */
-public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
-        implements Comparable<TypeReference<T>> {
+public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type> implements Comparable<TypeReference<T>> {
 
     private final Type type;
 
@@ -51,13 +50,12 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         if (getType() instanceof ParameterizedType) {
             return (Class<T>) ((ParameterizedType) clsType).getRawType();
         } else {
-            return (Class<T>) Class.forName(((Class) clsType).getName());
+            return (Class<T>) Class.forName(clsType.getTypeName());
         }
     }
 
-    public static <T extends org.web3j.abi.datatypes.Type> TypeReference<T> create(
-            final Class<T> cls) {
-        return new TypeReference<T>() {
+    public static <T extends org.web3j.abi.datatypes.Type> TypeReference<T> create(Class<T> cls) {
+        return new TypeReference<T>(){
             @Override
             public Type getType() {
                 return cls;
@@ -65,7 +63,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         };
     }
 
-    public abstract static class StaticArrayTypeReference<T extends org.web3j.abi.datatypes.Type>
+    public static abstract class StaticArrayTypeReference<T extends org.web3j.abi.datatypes.Type>
             extends TypeReference<T> {
 
         private final int size;

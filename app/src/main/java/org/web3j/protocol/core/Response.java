@@ -2,18 +2,13 @@ package org.web3j.protocol.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-/**
- * Our common JSON-RPC response type.
- *
- * @param <T> the object type contained within the response
- */
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Response<T> {
     private long id;
     private String jsonrpc;
     private T result;
     private Error error;
-    private String rawResponse;
 
     public Response() {
     }
@@ -52,14 +47,6 @@ public class Response<T> {
 
     public boolean hasError() {
         return error != null;
-    }
-
-    public String getRawResponse() {
-        return rawResponse;
-    }
-
-    public void setRawResponse(String rawResponse) {
-        this.rawResponse = rawResponse;
     }
 
     public static class Error {
@@ -113,8 +100,7 @@ public class Response<T> {
             if (getCode() != error.getCode()) {
                 return false;
             }
-            if (getMessage() != null
-                    ? !getMessage().equals(error.getMessage()) : error.getMessage() != null) {
+            if (getMessage() != null ? !getMessage().equals(error.getMessage()) : error.getMessage() != null) {
                 return false;
             }
             return getData() != null ? getData().equals(error.getData()) : error.getData() == null;

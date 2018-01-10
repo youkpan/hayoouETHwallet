@@ -2,15 +2,12 @@ package org.web3j.protocol.core.filters;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.web3j.protocol.Web3j;
-
-import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthLog;
@@ -43,54 +40,28 @@ public abstract class Filter<T> {
 
             filterId = ethFilter.getFilterId();
 
-            scheduledExecutorService.submit(new Runnable() {
+            schedule = scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
-                    Filter.this.getInitialFilterLogs();
+                    EthLog ethLog = null;
+                    try {
+                        ethLog = web3j.ethGetFilterChanges(filterId).send();
+                    } catch (IOException e) {
+                        Filter.this.throwException(e);
+                    }
+                    if (ethLog.hasError()) {
+                        Filter.this.throwException(ethFilter.getError());
+                    }
+
+                    Filter.this.process(ethLog.getLogs());
                 }
-            });
 
-            schedule = scheduledExecutorService.scheduleAtFixedRate(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            Filter.this.pollFilter(ethFilter);
-                        }
-                    },
-                    0, blockTime, TimeUnit.MILLISECONDS);
+            }, 0, blockTime, TimeUnit.MILLISECONDS);
+
 
         } catch (IOException e) {
             throwException(e);
         }
-    }
-
-    private void getInitialFilterLogs() {
-        try {
-            Request<?, EthLog> request = this.getFilterLogs(this.filterId);
-            EthLog ethLog = null;
-            if (request != null) {
-                ethLog = request.send();
-            } else {
-                ethLog = new EthLog();
-                ethLog.setResult(Collections.<EthLog.LogResult>emptyList());
-            }
-            process(ethLog.getLogs());
-        } catch (IOException e) {
-            throwException(e);
-        }
-    }
-
-    private void pollFilter(EthFilter ethFilter) {
-        EthLog ethLog = null;
-        try {
-            ethLog = web3j.ethGetFilterChanges(filterId).send();
-        } catch (IOException e) {
-            throwException(e);
-        }
-        if (ethLog.hasError()) {
-            throwException(ethFilter.getError());
-        }
-        process(ethLog.getLogs());
     }
 
     abstract EthFilter sendRequest() throws IOException;
@@ -115,16 +86,6 @@ public abstract class Filter<T> {
             throwException(ethUninstallFilter.getError());
         }
     }
-
-    /**
-     * Retrieves historic filters for the filter with the given id.
-     * Getting historic logs is not supported by all filters.
-     * If not the method should return an empty EthLog object
-     *
-     * @param filterId Id of the filter for which the historic log should be retrieved
-     * @return Historic logs, or an empty optional if the filter cannot retrieve historic logs
-     */
-    protected abstract Request<?, EthLog> getFilterLogs(BigInteger filterId);
 
     void throwException(Response.Error error) {
         throw new FilterException("Invalid request: " + error.getMessage());

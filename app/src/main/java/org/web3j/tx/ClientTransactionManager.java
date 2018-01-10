@@ -2,14 +2,15 @@ package org.web3j.tx;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.concurrent.ExecutionException;
 
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.tx.response.TransactionReceiptProcessor;
+import org.web3j.protocol.exceptions.TransactionTimeoutException;
 
 /**
- * TransactionManager implementation for using an Ethereum node to transact.
+ * <p>TransactionManager implementation for using an Ethereum node to transact.
  *
  * <p><b>Note</b>: accounts must be unlocked on the node for transactions to be successful.
  */
@@ -28,14 +29,6 @@ public class ClientTransactionManager extends TransactionManager {
     public ClientTransactionManager(
             Web3j web3j, String fromAddress, int attempts, int sleepDuration) {
         super(web3j, attempts, sleepDuration);
-        this.web3j = web3j;
-        this.fromAddress = fromAddress;
-    }
-
-    public ClientTransactionManager(
-            Web3j web3j, String fromAddress,
-            TransactionReceiptProcessor transactionReceiptProcessor) {
-        super(transactionReceiptProcessor);
         this.web3j = web3j;
         this.fromAddress = fromAddress;
     }

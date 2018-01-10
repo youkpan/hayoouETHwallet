@@ -17,16 +17,16 @@ public abstract class Filter<T extends Filter> {
 
     Filter() {
         thisObj = getThis();
-        topics = new ArrayList<FilterTopic>();
+        topics = new ArrayList<>();
     }
 
     public T addSingleTopic(String topic) {
-        topics.add(new SingleTopic(topic));
+        topics.add(new SingleTopic<>(topic));
         return getThis();
     }
 
     public T addNullTopic() {
-        topics.add(new SingleTopic());
+        topics.add(new SingleTopic<>());
         return getThis();
     }
 
@@ -40,15 +40,14 @@ public abstract class Filter<T extends Filter> {
         return topics;
     }
 
-    abstract T getThis();
+    abstract <T extends Filter> T getThis();
 
     public interface FilterTopic<T> {
         @JsonValue
         T getValue();
     }
 
-    public static class SingleTopic implements FilterTopic<String> {
-
+    public static class SingleTopic<String> implements FilterTopic {
         private String topic;
 
         public SingleTopic() {
@@ -65,22 +64,22 @@ public abstract class Filter<T extends Filter> {
         }
     }
 
-    public static class ListTopic implements FilterTopic<List<SingleTopic>> {
-        private List<SingleTopic> topics;
+    public static class ListTopic implements FilterTopic<List<SingleTopic<String>>> {
+        private List<SingleTopic<String>> topics;
 
         public ListTopic(String... optionalTopics) {
-            topics = new ArrayList<SingleTopic>();
+            topics = new ArrayList<>();
             for (String topic : optionalTopics) {
                 if (topic != null) {
-                    topics.add(new SingleTopic(topic));
+                    topics.add(new SingleTopic<>(topic));
                 } else {
-                    topics.add(new SingleTopic());
+                    topics.add(new SingleTopic<>());
                 }
             }
         }
 
         @Override
-        public List<SingleTopic> getValue() {
+        public List<SingleTopic<String>> getValue() {
             return topics;
         }
     }

@@ -1,10 +1,9 @@
 package org.web3j.abi;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
@@ -65,10 +64,10 @@ public class Utils {
             } else if (type.equals(StaticArray.class)) {
                 Class<U> parameterizedType = getParameterizedTypeFromArray(typeReference);
                 String parameterizedTypeName = getSimpleTypeName(parameterizedType);
-                return parameterizedTypeName
-                        + "["
-                        + ((TypeReference.StaticArrayTypeReference) typeReference).getSize()
-                        + "]";
+                return parameterizedTypeName +
+                        "[" +
+                        ((TypeReference.StaticArrayTypeReference) typeReference).getSize() +
+                        "]";
             } else {
                 throw new UnsupportedOperationException("Invalid type provided " + type.getName());
             }
@@ -77,7 +76,6 @@ public class Utils {
         }
     }
 
-    @SuppressWarnings("unchecked")
     static <T extends Type> Class<T> getParameterizedTypeFromArray(
             TypeReference typeReference) throws ClassNotFoundException {
 
@@ -85,7 +83,7 @@ public class Utils {
         java.lang.reflect.Type[] typeArguments =
                 ((ParameterizedType) type).getActualTypeArguments();
 
-        String parameterizedTypeName = ((Class) typeArguments[0]).getName();
+        String parameterizedTypeName =  ((Class) typeArguments[0]).getName();
         return (Class<T>) Class.forName(parameterizedTypeName);
     }
 
@@ -96,33 +94,6 @@ public class Utils {
         for (TypeReference<?> typeReference:input) {
             result.add((TypeReference<Type>) typeReference);
         }
-
-        return result;
-    }
-
-    public static <T, R extends Type<T>> List<R> typeMap(List<T> input, Class<R> destType)
-            throws TypeMappingException {
-
-        List<R> result = new ArrayList<R>(input.size());
-
-        if (!input.isEmpty()) {
-            try {
-                Constructor<R> constructor = destType.getDeclaredConstructor(
-                        input.get(0).getClass());
-                for (T value : input) {
-                    result.add(constructor.newInstance(value));
-                }
-            } catch (NoSuchMethodException e) {
-                throw new TypeMappingException(e);
-            } catch (IllegalAccessException e) {
-                throw new TypeMappingException(e);
-            } catch (InvocationTargetException e) {
-                throw new TypeMappingException(e);
-            } catch (InstantiationException e) {
-                throw new TypeMappingException(e);
-            }
-        }
-
         return result;
     }
 }

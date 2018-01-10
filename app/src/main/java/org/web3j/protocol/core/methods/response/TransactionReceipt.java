@@ -15,11 +15,8 @@ public class TransactionReceipt {
     private String blockNumber;
     private String cumulativeGasUsed;
     private String gasUsed;
-    private String contractAddress;
+    private String contractAddress;  // this is present in the spec
     private String root;
-    // status is only present on Byzantium transactions onwards
-    // see EIP 658 https://github.com/ethereum/EIPs/pull/658
-    private String status;
     private String from;
     private String to;
     private List<Log> logs;
@@ -30,8 +27,8 @@ public class TransactionReceipt {
 
     public TransactionReceipt(String transactionHash, String transactionIndex,
                               String blockHash, String blockNumber, String cumulativeGasUsed,
-                              String gasUsed, String contractAddress, String root, String status,
-                              String from, String to, List<Log> logs, String logsBloom) {
+                              String gasUsed, String contractAddress, String root, String from,
+                              String to, List<Log> logs, String logsBloom) {
         this.transactionHash = transactionHash;
         this.transactionIndex = transactionIndex;
         this.blockHash = blockHash;
@@ -40,7 +37,6 @@ public class TransactionReceipt {
         this.gasUsed = gasUsed;
         this.contractAddress = contractAddress;
         this.root = root;
-        this.status = status;
         this.from = from;
         this.to = to;
         this.logs = logs;
@@ -127,14 +123,6 @@ public class TransactionReceipt {
         this.root = root;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getFrom() {
         return from;
     }
@@ -178,44 +166,28 @@ public class TransactionReceipt {
 
         TransactionReceipt that = (TransactionReceipt) o;
 
-        if (getTransactionHash() != null
-                ? !getTransactionHash().equals(that.getTransactionHash())
-                : that.getTransactionHash() != null) {
+        if (getTransactionHash() != null ? !getTransactionHash().equals(that.getTransactionHash()) : that.getTransactionHash() != null) {
             return false;
         }
-        if (transactionIndex != null
-                ? !transactionIndex.equals(that.transactionIndex)
-                : that.transactionIndex != null) {
+        if (transactionIndex != null ? !transactionIndex.equals(that.transactionIndex) : that.transactionIndex != null) {
             return false;
         }
-        if (getBlockHash() != null
-                ? !getBlockHash().equals(that.getBlockHash())
-                : that.getBlockHash() != null) {
+        if (getBlockHash() != null ? !getBlockHash().equals(that.getBlockHash()) : that.getBlockHash() != null) {
             return false;
         }
-        if (blockNumber != null
-                ? !blockNumber.equals(that.blockNumber) : that.blockNumber != null) {
+        if (blockNumber != null ? !blockNumber.equals(that.blockNumber) : that.blockNumber != null) {
             return false;
         }
-        if (cumulativeGasUsed != null
-                ? !cumulativeGasUsed.equals(that.cumulativeGasUsed)
-                : that.cumulativeGasUsed != null) {
+        if (cumulativeGasUsed != null ? !cumulativeGasUsed.equals(that.cumulativeGasUsed) : that.cumulativeGasUsed != null) {
             return false;
         }
         if (gasUsed != null ? !gasUsed.equals(that.gasUsed) : that.gasUsed != null) {
             return false;
         }
-        if (getContractAddress() != null
-                ? !getContractAddress().equals(that.getContractAddress())
-                : that.getContractAddress() != null) {
+        if (getContractAddress() != null ? !getContractAddress().equals(that.getContractAddress()) : that.getContractAddress() != null) {
             return false;
         }
-        if (getRoot() != null
-                ? !getRoot().equals(that.getRoot()) : that.getRoot() != null) {
-            return false;
-        }
-        if (getStatus() != null
-                ? !getStatus().equals(that.getStatus()) : that.getStatus() != null) {
+        if (getRoot() != null ? !getRoot().equals(that.getRoot()) : that.getRoot() != null) {
             return false;
         }
         if (getFrom() != null ? !getFrom().equals(that.getFrom()) : that.getFrom() != null) {
@@ -227,8 +199,7 @@ public class TransactionReceipt {
         if (getLogs() != null ? !getLogs().equals(that.getLogs()) : that.getLogs() != null) {
             return false;
         }
-        return getLogsBloom() != null
-                ? getLogsBloom().equals(that.getLogsBloom()) : that.getLogsBloom() == null;
+        return getLogsBloom() != null ? getLogsBloom().equals(that.getLogsBloom()) : that.getLogsBloom() == null;
     }
 
     @Override
@@ -241,7 +212,6 @@ public class TransactionReceipt {
         result = 31 * result + (gasUsed != null ? gasUsed.hashCode() : 0);
         result = 31 * result + (getContractAddress() != null ? getContractAddress().hashCode() : 0);
         result = 31 * result + (getRoot() != null ? getRoot().hashCode() : 0);
-        result = 31 * result + (getStatus() != null ? getStatus().hashCode() : 0);
         result = 31 * result + (getFrom() != null ? getFrom().hashCode() : 0);
         result = 31 * result + (getTo() != null ? getTo().hashCode() : 0);
         result = 31 * result + (getLogs() != null ? getLogs().hashCode() : 0);

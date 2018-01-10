@@ -99,6 +99,8 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     //compile 'org.web3j:core-android:2.2.1'
+
+    //compile ('org.web3j:core:3.0.1-android')
     /*
     compile files ('web3j-3.2.0-jars/abi-3.2.0.jar')
     compile files ('web3j-3.2.0-jars/base-3.2.0.jar')
@@ -123,6 +125,7 @@ dependencies {
     compile files ('web3j-3.2.0-jars/utils-3.0.0-android.jar')
 */
     //compile 'org.bouncycastle:bcprov-jdk15on:1.54'
+    /*
     compile "com.madgag.spongycastle:prov:1.54.0.0"
     compile "org.slf4j:slf4j-api:1.7.25"
      compile 'com.fasterxml.jackson.core:jackson-core:2.8.5'
@@ -132,12 +135,23 @@ dependencies {
     compile "com.github.jnr:jnr-unixsocket:0.15"
     compile "com.squareup.okhttp3:okhttp:3.8.1"
     compile "com.squareup.okhttp3:logging-interceptor:3.8.1"
+    */
     //classpath 'io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3'
     //classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
 
     //compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
     //        "org.slf4j:slf4j-api:$slf4jVersion"
     //compile ('org.web3j:core:3.1.1-android')
+
+     //'org.apache.httpcomponents:httpclient:4.5.2',
+    compile       'com.fasterxml.jackson.core:jackson-databind:2.8.5',
+            'org.bouncycastle:bcprov-jdk15on:1.54',
+            'com.lambdaworks:scrypt:1.4.0',
+            'com.squareup:javapoet:1.7.0',
+            'io.reactivex:rxjava:1.2.4',
+            'com.github.jnr:jnr-unixsocket:0.15'
+
+
     googleplayCompile 'com.google.android.gms:play-services-analytics:11.0.4'
     googleplayCompile 'com.google.android.gms:play-services-ads:11.0.4'
     compile 'me.zhanghai.android.patternlock:library:2.1.2'

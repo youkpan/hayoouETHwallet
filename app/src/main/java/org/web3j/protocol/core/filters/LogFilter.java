@@ -1,17 +1,16 @@
 package org.web3j.protocol.core.filters;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthFilter;
 import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.core.methods.response.Log;
 
 /**
- * Log filter handler.
+ * Log filter handler
  */
 public class LogFilter extends Filter<Log> {
 
@@ -23,7 +22,6 @@ public class LogFilter extends Filter<Log> {
         super(web3j, callback);
         this.ethFilter = ethFilter;
     }
-
 
     @Override
     EthFilter sendRequest() throws IOException {
@@ -41,10 +39,5 @@ public class LogFilter extends Filter<Log> {
                         "Unexpected result type: " + logResult.get() + " required LogObject");
             }
         }
-    }
-
-    @Override
-    protected Request<?, EthLog> getFilterLogs(BigInteger filterId) {
-        return web3j.ethGetFilterLogs(filterId);
     }
 }

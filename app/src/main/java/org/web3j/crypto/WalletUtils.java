@@ -5,13 +5,13 @@ import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.web3j.protocol.ObjectMapperFactory;
 import org.web3j.utils.Numeric;
 
 import static org.web3j.crypto.Keys.ADDRESS_LENGTH_IN_HEX;
@@ -21,13 +21,6 @@ import static org.web3j.crypto.Keys.PRIVATE_KEY_LENGTH_IN_HEX;
  * Utility functions for working with Wallet files.
  */
 public class WalletUtils {
-
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
-    static {
-        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    }
 
     public static String generateFullNewWalletFile(String password, File destinationDirectory)
             throws NoSuchAlgorithmException, NoSuchProviderException,
@@ -66,6 +59,7 @@ public class WalletUtils {
         String fileName = getWalletFileName(walletFile);
         File destination = new File(destinationDirectory, fileName);
 
+        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
         objectMapper.writeValue(destination, walletFile);
 
         return fileName;
@@ -78,13 +72,17 @@ public class WalletUtils {
 
     public static Credentials loadCredentials(String password, File source)
             throws IOException, CipherException {
+        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
         WalletFile walletFile = objectMapper.readValue(source, WalletFile.class);
         return Credentials.create(Wallet.decrypt(password, walletFile));
     }
 
     private static String getWalletFileName(WalletFile walletFile) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("'UTC--'yyyy-MM-dd'T'HH-mm-ss.SSS'--'");
-        return dateFormat.format(new Date()) + walletFile.getAddress() + ".json";
+        DateTimeFormatter format = DateTimeFormatter.ofPattern(
+                "'UTC--'yyyy-MM-dd'T'HH-mm-ss.nVV'--'");
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+
+        return now.format(format) + walletFile.getAddress() + ".json";
     }
 
     public static String getDefaultKeyDirectory() {
@@ -95,9 +93,8 @@ public class WalletUtils {
         String osName = osName1.toLowerCase();
 
         if (osName.startsWith("mac")) {
-            return String.format(
-                    "%s%sLibrary%sEthereum", System.getProperty("user.home"), File.separator,
-                    File.separator);
+            return String.format("%s%sLibrary%sEthereum", 
+            		System.getProperty("user.home"), File.separator, File.separator);
         } else if (osName.startsWith("win")) {
             return String.format("%s%sEthereum", System.getenv("APPDATA"), File.separator);
         } else {
@@ -106,8 +103,7 @@ public class WalletUtils {
     }
 
     public static String getTestnetKeyDirectory() {
-        return String.format(
-                "%s%stestnet%skeystore", getDefaultKeyDirectory(), File.separator, File.separator);
+        return String.format("%s%stestnet%skeystore", getDefaultKeyDirectory(), File.separator, File.separator);
     }
 
     public static String getMainnetKeyDirectory() {
@@ -119,15 +115,8 @@ public class WalletUtils {
         return cleanPrivateKey.length() == PRIVATE_KEY_LENGTH_IN_HEX;
     }
 
-    public static boolean isValidAddress(String input) {
-        String cleanInput = Numeric.cleanHexPrefix(input);
-
-        try {
-            Numeric.toBigIntNoPrefix(cleanInput);
-        } catch (NumberFormatException e) {
-            return false;
-        }
-
-        return cleanInput.length() == ADDRESS_LENGTH_IN_HEX;
+    public static boolean isValidAddress(String address) {
+        String addressNoPrefix = Numeric.cleanHexPrefix(address);
+        return addressNoPrefix.length() == ADDRESS_LENGTH_IN_HEX;
     }
 }

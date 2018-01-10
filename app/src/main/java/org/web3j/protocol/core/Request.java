@@ -1,18 +1,18 @@
 package org.web3j.protocol.core;
 
+
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import rx.Observable;
+import rx.Subscriber;
 
 import org.web3j.protocol.Web3jService;
 
-public class Request<S, T extends Response> {
-    private static AtomicLong nextId = new AtomicLong(0);
 
+public class Request<S, T extends Response> {
     private String jsonrpc = "2.0";
     private String method;
     private List<S> params;
@@ -27,11 +27,11 @@ public class Request<S, T extends Response> {
     public Request() {
     }
 
-    public Request(String method, List<S> params,
+    public Request(String method, List<S> params, long id,
                    Web3jService web3jService, Class<T> type) {
         this.method = method;
         this.params = params;
-        this.id = nextId.getAndIncrement();
+        this.id = id;
         this.web3jService = web3jService;
         this.responseType = type;
     }
@@ -72,16 +72,23 @@ public class Request<S, T extends Response> {
         return web3jService.send(this, responseType);
     }
 
-    public Future<T> sendAsync() {
+    public CompletableFuture<T> sendAsync() {
         return  web3jService.sendAsync(this, responseType);
     }
 
     public Observable<T> observable() {
-        return new RemoteCall<T>(new Callable<T>() {
-            @Override
-            public T call() throws Exception {
-                return Request.this.send();
-            }
-        }).observable();
+        return Observable.create(
+                new Observable.OnSubscribe<T>() {
+                    @Override
+                    public void call(final Subscriber<? super T> subscriber) {
+                        try {
+                            subscriber.onNext(send());
+                            subscriber.onCompleted();
+                        } catch (IOException e) {
+                            subscriber.onError(e);
+                        }
+                    }
+                }
+        );
     }
 }

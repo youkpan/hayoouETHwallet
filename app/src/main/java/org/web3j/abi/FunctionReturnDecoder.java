@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.web3j.abi.datatypes.Array;
-import org.web3j.abi.datatypes.Bytes;
 import org.web3j.abi.datatypes.BytesType;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.DynamicBytes;
@@ -48,8 +47,8 @@ public class FunctionReturnDecoder {
      * encoded, unlike non-indexed parameters which are encoded as per ABI-encoded function
      * parameters and return values.</p>
      *
-     * <p>If any of the following types are indexed, the Keccak-256 hashes of the values are
-     * returned instead. These are returned as a bytes32 value.</p>
+     * <p>If any of the following types are indexed, the Keccak-256 hashes of the values are returned
+     * instead. These are returned as a bytes32 value.</p>
      *
      * <ul>
      *     <li>Arrays</li>
@@ -66,7 +65,6 @@ public class FunctionReturnDecoder {
      * @param <T> type of TypeReference
      * @return the decode value
      */
-    @SuppressWarnings("unchecked")
     public static <T extends Type> Type decodeIndexedValue(
             String rawInput, TypeReference<T> typeReference) {
         String input = Numeric.cleanHexPrefix(rawInput);
@@ -74,11 +72,9 @@ public class FunctionReturnDecoder {
         try {
             Class<T> type = typeReference.getClassType();
 
-            if (Bytes.class.isAssignableFrom(type)) {
-                return TypeDecoder.decodeBytes(input, (Class<Bytes>) Class.forName(type.getName()));
-            } else if (Array.class.isAssignableFrom(type)
-                    || BytesType.class.isAssignableFrom(type)
-                    || Utf8String.class.isAssignableFrom(type)) {
+            if (Array.class.isAssignableFrom(type) ||
+                    BytesType.class.isAssignableFrom(type) ||
+                    Utf8String.class.isAssignableFrom(type)) {
                 return TypeDecoder.decodeBytes(input, Bytes32.class);
             } else {
                 return TypeDecoder.decode(input, type);
@@ -90,12 +86,11 @@ public class FunctionReturnDecoder {
 
     private static List<Type> build(
             String input, List<TypeReference<Type>> outputParameters) {
-        List<Type> results = new ArrayList<Type>(outputParameters.size());
+        List<Type> results = new ArrayList<>(outputParameters.size());
 
         int offset = 0;
         for (TypeReference<?> typeReference:outputParameters) {
             try {
-                @SuppressWarnings("unchecked")
                 Class<Type> type = (Class<Type>) typeReference.getClassType();
 
                 int hexStringDataOffset = getDataOffset(input, offset, type);
@@ -105,14 +100,8 @@ public class FunctionReturnDecoder {
                     result = TypeDecoder.decodeDynamicArray(
                             input, hexStringDataOffset, typeReference);
                     offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
-                } else if (typeReference instanceof TypeReference.StaticArrayTypeReference) {
-                    int length = ((TypeReference.StaticArrayTypeReference) typeReference).getSize();
-                    result = TypeDecoder.decodeStaticArray(
-                            input, hexStringDataOffset, typeReference, length);
-                    offset += length * MAX_BYTE_LENGTH_FOR_HEX_STRING;
                 } else if (StaticArray.class.isAssignableFrom(type)) {
-                    int length = Integer.parseInt(type.getSimpleName()
-                            .substring(StaticArray.class.getSimpleName().length()));
+                    int length = ((TypeReference.StaticArrayTypeReference) typeReference).getSize();
                     result = TypeDecoder.decodeStaticArray(
                             input, hexStringDataOffset, typeReference, length);
                     offset += length * MAX_BYTE_LENGTH_FOR_HEX_STRING;

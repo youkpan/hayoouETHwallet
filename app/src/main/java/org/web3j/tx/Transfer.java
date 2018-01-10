@@ -1,18 +1,22 @@
 package org.web3j.tx;
 
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.exceptions.TransactionException;
+import org.web3j.protocol.exceptions.TransactionTimeoutException;
+import org.web3j.utils.Async;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
+
 
 /**
  * Class for performing Ether transactions on the Ethereum blockchain.
@@ -28,22 +32,22 @@ public class Transfer extends ManagedTransaction {
 
     /**
      * Given the duration required to execute a transaction, asyncronous execution is strongly
-     * recommended via {@link Transfer#sendFunds(String, BigDecimal, Convert.Unit)}.
+     * recommended via {@link Transfer#sendFundsAsync(String, BigDecimal, Convert.Unit)}.
      *
      * @param toAddress destination address
      * @param value amount to send
      * @param unit of specified send
      *
-     * @return the transaction receipt
+     * @return {@link Optional} containing our transaction receipt
      * @throws ExecutionException if the computation threw an
-     *                            exception
+     * exception
      * @throws InterruptedException if the current thread was interrupted
-     *                              while waiting
-     * @throws TransactionException if the transaction was not mined while waiting
+     * while waiting
+     * @throws TransactionTimeoutException if the transaction was not mined while waiting
      */
     private TransactionReceipt send(String toAddress, BigDecimal value, Convert.Unit unit)
             throws IOException, InterruptedException,
-            TransactionException {
+            TransactionTimeoutException {
 
         BigInteger gasPrice = getGasPrice();
         return send(toAddress, value, unit, gasPrice, GAS_LIMIT);
@@ -52,33 +56,16 @@ public class Transfer extends ManagedTransaction {
     private TransactionReceipt send(
             String toAddress, BigDecimal value, Convert.Unit unit, BigInteger gasPrice,
             BigInteger gasLimit) throws IOException, InterruptedException,
-            TransactionException {
+            TransactionTimeoutException {
 
         BigDecimal weiValue = Convert.toWei(value, unit);
         if (!Numeric.isIntegerValue(weiValue)) {
             throw new UnsupportedOperationException(
-                    "Non decimal Wei value provided: " + value + " " + unit.toString()
-                            + " = " + weiValue + " Wei");
+                    "Non decimal Wei value provided: " + value + " " + unit.toString() +
+                            " = " + weiValue + " Wei");
         }
 
-        String resolvedAddress = ensResolver.resolve(toAddress);
-        return send(resolvedAddress, "", weiValue.toBigIntegerExact(), gasPrice, gasLimit);
-    }
-
-    public static RemoteCall<TransactionReceipt> sendFunds(
-            final Web3j web3j, final Credentials credentials,
-            final String toAddress, final BigDecimal value, final Convert.Unit unit)
-            throws InterruptedException,
-            IOException, TransactionException {
-
-        final TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
-
-        return new RemoteCall<TransactionReceipt>(new Callable<TransactionReceipt>() {
-            @Override
-            public TransactionReceipt call() throws Exception {
-                return new Transfer(web3j, transactionManager).send(toAddress, value, unit);
-            }
-        });
+        return send(toAddress, "", weiValue.toBigIntegerExact(), gasPrice, gasLimit);
     }
 
     /**
@@ -89,26 +76,48 @@ public class Transfer extends ManagedTransaction {
      * @param value amount to send
      * @param unit of specified send
      *
-     * @return {@link RemoteCall} containing executing transaction
+     * @return {@link Future} containing executing transaction
      */
-    public RemoteCall<TransactionReceipt> sendFunds(
+    public Future<TransactionReceipt> sendFundsAsync(
             final String toAddress, final BigDecimal value, final Convert.Unit unit) {
-        return new RemoteCall<TransactionReceipt>(new Callable<TransactionReceipt>() {
+
+        return Async.run(new Callable<TransactionReceipt>() {
             @Override
             public TransactionReceipt call() throws Exception {
-                return Transfer.this.send(toAddress, value, unit);
+                return send(toAddress, value, unit);
             }
         });
     }
 
-    public RemoteCall<TransactionReceipt> sendFunds(
+    public Future<TransactionReceipt> sendFundsAsync(
             final String toAddress, final BigDecimal value, final Convert.Unit unit,
             final BigInteger gasPrice, final BigInteger gasLimit) {
-        return new RemoteCall<TransactionReceipt>(new Callable<TransactionReceipt>() {
+        return Async.run(new Callable<TransactionReceipt>() {
             @Override
             public TransactionReceipt call() throws Exception {
                 return Transfer.this.send(toAddress, value, unit, gasPrice, gasLimit);
             }
         });
+    }
+
+    public static TransactionReceipt sendFunds(
+            Web3j web3j, Credentials credentials,
+            String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException,
+            IOException, TransactionTimeoutException {
+
+        TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
+
+        return new Transfer(web3j, transactionManager).send(toAddress, value, unit);
+    }
+
+    public static Future<TransactionReceipt> sendFundsAsync(
+            Web3j web3j, Credentials credentials,
+            String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException,
+            ExecutionException, TransactionTimeoutException {
+
+        TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
+
+        return new Transfer(web3j, transactionManager)
+                .sendFundsAsync(toAddress, value, unit);
     }
 }
