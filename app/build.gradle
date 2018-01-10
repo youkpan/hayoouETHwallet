@@ -122,7 +122,7 @@ dependencies {
     compile files ('web3j-3.2.0-jars/tuples-3.0.0-android.jar')
     compile files ('web3j-3.2.0-jars/utils-3.0.0-android.jar')
 */
-
+    //compile 'org.bouncycastle:bcprov-jdk15on:1.54'
     compile "com.madgag.spongycastle:prov:1.54.0.0"
     compile "org.slf4j:slf4j-api:1.7.25"
      compile 'com.fasterxml.jackson.core:jackson-core:2.8.5'
