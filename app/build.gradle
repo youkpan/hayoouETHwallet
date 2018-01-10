@@ -6,7 +6,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
     defaultConfig {
-        applicationId "com.rehanced.lunary"
+        applicationId "com.hayoou.HayoouETH"
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 28
@@ -56,7 +56,7 @@ android {
         localProperties.withInputStream { instr ->
             properties.load(instr)
         }
-        def ndkDir = properties.getProperty('ndk.dir')
+        def ndkDir = "C:\\Android\\android-ndk-r14b"//properties.getProperty('ndk.dir')
 
         if (Os.isFamily(Os.FAMILY_WINDOWS)) {
             commandLine ndkDir + '\\ndk-build.cmd',

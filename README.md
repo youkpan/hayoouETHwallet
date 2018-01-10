@@ -1,11 +1,11 @@
-# Lunary Ethereum Wallet
+# HayoouETH Ethereum Wallet
 
-Lunary is a beautifully designed, easy to use, secure and Open Source Ethereum Wallet for Android.
+HayoouETH is a beautifully designed, easy to use, secure and Open Source Ethereum Wallet for Android.
 
-[![Get it on Google Play](http://rehanced.com/apps/badge.png)](https://play.google.com/store/apps/details?id=com.rehanced.lunary)
-[![Get it on F-Droid](http://rehanced.com/apps/fdroidbadge.png)](https://f-droid.org/repository/browse/?fdid=com.rehanced.lunary)
+[![Get it on Google Play](http://rehanced.com/apps/badge.png)](https://play.google.com/store/apps/details?id=com.rehanced.HayoouETH)
+[![Get it on F-Droid](http://rehanced.com/apps/fdroidbadge.png)](https://f-droid.org/repository/browse/?fdid=com.rehanced.HayoouETH)
 
-<img src="http://rehanced.com/apps/lunary/githubbanner.png" >
+<img src="http://rehanced.com/apps/HayoouETH/githubbanner.png" >
 
 ## Features
 * Multi wallet support  
@@ -47,11 +47,11 @@ public class APIKey {
 * [Poloniex.com](https://poloniex.com/)  
 * [Ethplorer.io](https://ethplorer.io)
 
-## Donations / Support Lunary
-Ethereum: 0xa9981a33f6b1A18da5Db58148B2357f22B44e1e0
+## Donations / Support HayoouETH
+Ethereum: 0x65f24a05e4d56ff665c1766f145ec743ddf4e2f8
 
 ## Licence
 GPL3
 
 ## Community
-Visit us on [/r/Lunary](https://www.reddit.com/r/lunary/)
+Visit us on [/r/HayoouETH](https://www.reddit.com/r/HayoouETH/)
