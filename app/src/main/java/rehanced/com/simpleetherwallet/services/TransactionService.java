@@ -86,7 +86,7 @@ public class TransactionService extends IntentService {
                                         "Data: " + tx.getData()
                         );
 
-                        byte[] signed = TransactionEncoder.signMessage(tx, (byte) 157, keys);
+                        byte[] signed = TransactionEncoder.signMessage(tx, (byte) -19, keys);
 
                         forwardTX(signed);
                     } catch (Exception e) {

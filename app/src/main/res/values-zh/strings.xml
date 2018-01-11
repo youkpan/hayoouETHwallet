@@ -135,7 +135,7 @@
         <string name ="qr_scan_title"> QR地址</string>
         <string name ="activity_send_title">交易</string>
         <string name ="last_24_hours">过去24小时</string>
-        <string name ="last_7_days"> Last 7 Days </string>
+        <string name ="last_7_days"> 过去7天 </string>
         <string name ="last_30_days">过去30天</string>
         <string name ="last_year">去年</string>
         <string name ="err_no_con">没有互联网连接</string>
@@ -181,14 +181,14 @@
         <string name ="dialog_ex_nofull_title">没有完整电子钱包</string>
         <string name ="dialog_ex_nofull_text">只监视钱包不能被导出</string>
         <string name ="dialog_exporting_title">导出您的电子钱包</string>
-        <string name="dialog_exporting_text">您的Ethereum钱包的副本将被放置在Android手机根目录中的"哈友区块链"文件夹内。请注意，在您的设备上运行的其他应用程序可以在技术上访问您已导出的任何钱包。因此，我们强烈建议您在完成备份后立即从哈友区块链文件夹中清除所有导出的钱包。</string>
+        <string name="dialog_exporting_text">您的哈友区块链钱包的副本将被放置在Android手机根目录中的"哈友区块链"(/sdcard/HayoouETH/)文件夹内。请注意，在您的设备上运行的其他应用程序可以在技术上访问您已导出的任何钱包。因此，我们强烈建议您在完成备份后立即从哈友区块链文件夹中清除所有导出的钱包。</string>
         <string name ="dialog_nofullwallet">没有完整电子钱包</string>
         <string name ="dialog_nofullwallet_text">为了发送资金，您需要一个带私钥的完整钱包。请先生成或导入一个。</string>
         <string name ="dialog_no_wallets">没有钱包</string>
         <string name ="dialog_no_wallets_text">为了申请资金，您需要一个钱包或手表专用地址。</string>
         <string name="dialog_no_wallets_found">找不到钱包</string>
         <string name ="dialog_no_wallets_found_text">请将您要导入的钱包放入哈友区块链文件夹(/sdcard/HayoouETH/)中，并确保其名称正确。从Mist或其他桌面客户端导入时，您不必重命名您的钱包。</string>
-        <string name ="notification_ticker">传入以太网交易... </string>
+        <string name ="notification_ticker">传入哈友以太网交易... </string>
         <string name ="notification_transfersuc">传输成功</string>
 
         <string name ="notification_transferfail">传输失败</string>
@@ -231,7 +231,7 @@
         <string name ="send_expert_warning">您可以添加额外的数据与您的交易一起发送。如果你不知道这是什么，那么就不要碰它，否则会发生不好的事情！</string>
         <string name ="expert_mode_optional">专家模式（可选）</string>
         <string name ="transaction_failed">交易失败</string>
-        <string name ="reddit">哈友区块链 微博</string>
+        <string name ="reddit">哈友社区</string>
         <string name ="add">添加</string>
         <string name ="show">显示</string>
         <string name ="setting_erc_qr_encoding">使用ERC-67 QR编码</string>
@@ -253,24 +253,16 @@
         <string name ="activity_private_key_explanation">这是您的钱包的未加密私钥。任何有权访问此密钥或二维码的人都可以将您的资金用于乙醚和令牌。不要存储这个未加密的！</string>
         <string name ="activity_private_key_wrong_pw">您的密码不正确 - 无法解密私钥！</string>
     <string name="tos" tools:ignore="TypographyOther"><![CDATA[
-    请参看  <a href="https://en.wikipedia.org/wiki/GNU_General_Public_License">GNU协议</a>
+
     <br><br>
-    哈友社区区块链是为社区成员定制，这是一个安卓 <a href="http://hayoou.com/eth"> 哈友社区区块链 </a> 移动客户端钱包。
-<br/> <br/>
-它在 <a href="https://github.com/ethereum/go-ethereum"> go ethereum </a> 项目中使用 "in 进程" 节点作为 哈友区块链 的轻型客户端。
-<br/> <br/>
-感谢 <a href="https://github.com/karalabe"> karalabe </a>, <a href="https://github.com/fjl">-fjl-</a>, <a href="https://github.com/zsfelfoldi"> zsfelfoldi </a> 和 <a href="https://github.com/obscuren"> obscuren </a> 很不错!
-<br/> <br/>
-此 版本 使用 <a href="http://hayoou.com/ethwallet"> hayoou.com/ethwallet </a> 区块链。
-<br/> <br/>
+    哈友社区区块链是为社区成员定制，这是一个安卓客户端钱包。
+
 它使用的是轻型客户端, 而不是集中化的预配置节点。
-为了获取汇率, 我们将查询 <a href="https://etcex.hayoou.com"> etcex.hayoou.com（建设中） </a> , 我们使用 <a href="https://ethscan.hayoou.com"> ethscan.hayoou.com（建设中） </a> 查看地址资金。
+为了获取汇率, 我们将查询 etcex.hayoou.com（建设中） , 我们使用  ethscan.hayoou.com（建设中）   查看地址资金。
 <br/> <br/>
-注意, 这是一个初级版本, 将有错误。
+您可以在 github 中查看源代码  hayoou.com/ETHcode
 <br/> <br/>
-您可以在 github 中查看源代码 <a href="https://github.com/youkpan/hayoou_ETH_android"> hayoou_ETH_android </a>
-<br/> <br/>
-由 <a href="https://hayoou.com"> hayoou.com </a> 提供技术支持
+由   hayoou.com  提供技术支持
 <br/> <br/>
 客服咨询微信：hayoou2
 <br/> <br/>
