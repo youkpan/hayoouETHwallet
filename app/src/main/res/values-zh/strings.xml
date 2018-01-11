@@ -118,7 +118,7 @@
 
 
         <string name ="app_intro_text">欢迎来到哈友区块链安卓客户端！在开始之前，请花一些时间阅读我们的服务条款。</string>
-        <string name ="app_intro_title">以太钱包</string>
+        <string name ="app_intro_title">哈友区块链</string>
         <string name ="app_intro_please_agree">在继续之前，请阅读并同意服务条款</string>
         <string name ="app_intro_iagree">我同意服务条款</string>
         <string name ="fragment_send_ether_amount">金额</string>

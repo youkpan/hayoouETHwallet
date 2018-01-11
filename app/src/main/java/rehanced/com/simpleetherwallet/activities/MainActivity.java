@@ -443,7 +443,7 @@ public class MainActivity extends SecureAppCompatActivity implements NetworkUpda
             }
             case 4: {
                 Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://hayoou.com"));
+                i.setData(Uri.parse("http://hayoou.com/news"));
                 startActivity(i);
                 break;
             }
