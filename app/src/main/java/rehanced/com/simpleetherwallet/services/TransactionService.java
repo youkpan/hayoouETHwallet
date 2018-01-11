@@ -15,8 +15,8 @@ import org.json.JSONObject;
 import org.spongycastle.util.encoders.Hex;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.TransactionEncoder;
-//import org.web3j.protocol.core.methods.request.RawTransaction;
-import org.web3j.crypto.RawTransaction;
+import org.web3j.protocol.core.methods.request.RawTransaction;
+//import org.web3j.crypto.RawTransaction;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -86,7 +86,7 @@ public class TransactionService extends IntentService {
                                         "Data: " + tx.getData()
                         );
 
-                        byte[] signed = TransactionEncoder.signMessage(tx, (byte) 5767778797L, keys);
+                        byte[] signed = TransactionEncoder.signMessage(tx, (byte) 157, keys);
 
                         forwardTX(signed);
                     } catch (Exception e) {
