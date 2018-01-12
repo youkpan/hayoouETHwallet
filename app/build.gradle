@@ -3,17 +3,20 @@ import org.apache.tools.ant.taskdefs.condition.Os
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.hayoou.HayoouETH"
-        minSdkVersion 16
+        minSdkVersion 24
         targetSdkVersion 25
         versionCode 28
         versionName "1.37"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+        jackOptions {
+            enabled false
+        }
     }
     buildTypes {
         release {
@@ -23,9 +26,12 @@ android {
     }
 
     compileOptions {
-        targetCompatibility 1.7
+        targetCompatibility JavaVersion.VERSION_1_7
         sourceCompatibility 1.7
+        // We don't want any compiler warnings
+
     }
+
 
     packagingOptions {
         exclude 'META-INF/NOTICE'
@@ -61,7 +67,7 @@ android {
         if (Os.isFamily(Os.FAMILY_WINDOWS)) {
             commandLine ndkDir + '\\ndk-build.cmd',
                     'NDK_LIBS_OUT=main/jniLibs',
-                    'NDK_PROJECT_PATH=' + rootDir + '\\app\\src',
+                    'NDK_PROJECT_P ATH=' + rootDir + '\\app\\src',
                     'APP_BUILD_SCRIPT=jni/Android.mk',
                     '-C',
                     file('src').absolutePath
@@ -86,20 +92,23 @@ repositories {
 }
 
 dependencies {
+/*
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    */
     compile 'com.github.clans:fab:1.6.4'
     compile 'me.dm7.barcodescanner:zxing:1.8.4'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.squareup.okhttp3:okhttp:3.8.0'
     compile 'com.android.support:support-v4:25.3.1'
-    testCompile 'junit:junit:4.12'
+    //testCompile 'junit:junit:4.12'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'org.web3j:core-android:2.2.1'
-    //compile  files ('web3j-3.2.0-jars/core-2.2.1.jar')
+
+    //compile 'org.web3j:core-android:2.2.1'
+
     //compile ('org.web3j:core:3.0.1-android')
     /*
     compile files ('web3j-3.2.0-jars/abi-3.2.0.jar')
@@ -125,7 +134,7 @@ dependencies {
     compile files ('web3j-3.2.0-jars/utils-3.0.0-android.jar')
 */
     //compile 'org.bouncycastle:bcprov-jdk15on:1.54'
-    //compile "com.madgag.spongycastle:prov:1.54.0.0"
+    compile "com.madgag.spongycastle:prov:1.54.0.0"
     /*
 
     compile "org.slf4j:slf4j-api:1.7.25"
@@ -144,15 +153,27 @@ dependencies {
     //        "org.slf4j:slf4j-api:$slf4jVersion"
     //compile ('org.web3j:core:3.1.1-android')
 
-     //'org.apache.httpcomponents:httpclient:4.5.2',
-    /*
-    compile       'com.fasterxml.jackson.core:jackson-databind:2.8.5',
+     //
+
+     //
+    //compile  files ('libs/httpclient-4.2.5.jar')
+     //  'org.apache.httpcomponents:httpclient:4.5.2',
+    compile 'org.apache.httpcomponents:httpcomponents-client:4.5.2'
+    compile "org.slf4j:slf4j-api:1.7.25"
+    compile "com.squareup.okhttp3:logging-interceptor:3.8.1"
+    //compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
+    compile     'com.fasterxml.jackson.core:jackson-databind:2.8.5',
             'org.bouncycastle:bcprov-jdk15on:1.54',
             'com.lambdaworks:scrypt:1.4.0',
             'com.squareup:javapoet:1.7.0',
             'io.reactivex:rxjava:1.2.4',
             'com.github.jnr:jnr-unixsocket:0.15'
-*/
+
+    compile 'org.mockito:mockito-core:1.10.19'
+    compile 'cz.msebera.android:httpclient:4.4.1.2'
+
+    //compile  files ('web3j-3.2.0-jars/core-2.2.1.jar')
+    //compile  files ('web3j-3.2.0-jars/core-2.2.1-sources.jar')
 
     googleplayCompile 'com.google.android.gms:play-services-analytics:11.0.4'
     googleplayCompile 'com.google.android.gms:play-services-ads:11.0.4'
