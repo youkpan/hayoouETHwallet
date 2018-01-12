@@ -30,7 +30,7 @@
     <string name ="pref_header_general">常规</string>
 
     <string name ="pref_title_social_recommendations">显示零金额的交易</string>
-    <string name ="pref_description_social_recommendations">是否隐藏没有任何乙醚数量的合约调用</string>
+    <string name ="pref_description_social_recommendations">是否隐藏没有任何交易量的合约</string>
 
     <string name="pref_title_start">作为默认选项卡</string>
     <string name ="pref_sum_start">如果启用，应用程序将在钱包选项卡中开始预选，而不是在价格标签</string>
@@ -106,7 +106,7 @@
 
         <string name ="choose_your_address">来自</string>
         <string name ="send_to">至</string>
-        <string name ="choose_ether_amount">可用的以太网</string>
+        <string name ="choose_ether_amount">可用的数额</string>
         <string name ="choose_gas">交易成本</string>
 
 
@@ -187,13 +187,13 @@
         <string name ="dialog_no_wallets">没有钱包</string>
         <string name ="dialog_no_wallets_text">为了申请资金，您需要一个钱包或手表专用地址。</string>
         <string name="dialog_no_wallets_found">找不到钱包</string>
-        <string name ="dialog_no_wallets_found_text">请将您要导入的钱包放入哈友区块链文件夹(/sdcard/HayoouETH/)中，并确保其名称正确。从Mist或其他桌面客户端导入时，您不必重命名您的钱包。</string>
+        <string name ="dialog_no_wallets_found_text">请将您要导入的钱包放入哈友区块链文件夹(/sdcard/HayoouETH/)中，请保留副本，该文件夹在应用卸载时可能会被删除。从Mist或其他桌面客户端导入时，您不必重命名您的钱包。</string>
         <string name ="notification_ticker">传入哈友以太网交易... </string>
         <string name ="notification_transfersuc">传输成功</string>
 
         <string name ="notification_transferfail">传输失败</string>
         <string name ="notification_transferingticker">传送以太... </string>
-        <string name ="notification_transfering_title">传输以太网</string>
+        <string name ="notification_transfering_title">传输到哈友以太区块链</string>
         <string name ="notification_might_take_a_minute">这可能需要一分钟</string>
         <string name ="notification_wallgen_maytake">这可能需要几分钟</string>
         <string name ="notification_wallgen_title">生成钱包... </string>
@@ -245,7 +245,7 @@
         <string name ="dialog_disable_ad_title">：（</string>
         <string name ="dialog_disable_ad_text">如果广告真的让你感到困扰，那我们就明白了，我们会让你停用它。但是，如果问太多，我们想改变你的想法，让哈友区块链越来越好。这个小广告横幅真的帮助我们，我们收到的每一笔捐款都是一样的。请保持横幅启用或考虑一小笔捐款。您需要重新启动应用才能使新设置生效。继续？</string>
 
-        <string name ="showcase_got_it"> GOT IT </string>
+        <string name ="showcase_got_it"> 知道了 </string>
         <string name ="show_case_wallet_gen_text">要生成新钱包，只需按下+并选择"生成新钱包"</string>
         <string name ="show_case_backup">要修改现有钱包或创建备份，只需按住钱包即可。</string>
         <string name ="wallet_menu_private_key">显示私钥</string>

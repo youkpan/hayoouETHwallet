@@ -19,7 +19,7 @@ import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import rehanced.com.simpleetherwallet.APIKey;
+//import rehanced.com.simpleetherwallet.APIKey;
 import rehanced.com.simpleetherwallet.interfaces.LastIconLoaded;
 import rehanced.com.simpleetherwallet.interfaces.StorableWallet;
 import rehanced.com.simpleetherwallet.utils.Key;
@@ -39,9 +39,8 @@ public class EtherscanAPI {
     }
 
     public void getPriceChart(long starttime, int period, boolean usd, Callback b) throws IOException {
-        get("http://poloniex.com/public?command=returnChartData&currencyPair=" + (usd ? "USDT_ETH" : "BTC_ETH") + "&start=" + starttime + "&end=9999999999&period=" + period, b);
+        get("http://heapi.hayoou.com/getex.php?command=returnChartData&currencyPair=" + (usd ? "USDT_HYE" : "BTC_HYE") + "&start=" + starttime + "&end=9999999999&period=" + period, b);
     }
-
 
     /**
      * Retrieve all internal transactions from address like contract calls, for normal transactions @see rehanced.com.simpleetherwallet.network.EtherscanAPI#getNormalTransactions() )
@@ -199,7 +198,7 @@ public class EtherscanAPI {
 
 
     private EtherscanAPI() {
-        token = new Key(APIKey.API_KEY).toString();
+        token = new Key("9ZUSL64LS9POL3J2MVKR0ES1MBQHSFUOKK").toString();
     }
 
 }

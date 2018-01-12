@@ -5,9 +5,12 @@ import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+//import java.time.ZoneOffset;
+//import java.time.ZonedDateTime;
+//import java.time.format.DateTimeFormatter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -78,11 +81,17 @@ public class WalletUtils {
     }
 
     private static String getWalletFileName(WalletFile walletFile) {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern(
-                "'UTC--'yyyy-MM-dd'T'HH-mm-ss.nVV'--'");
-        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        //DateTimeFormatter format = DateTimeFormatter.ofPattern(
+        //        "'UTC--'yyyy-MM-dd'T'HH-mm-ss.nVV'--'");
+        //ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        //now.format(format) +
 
-        return now.format(format) + walletFile.getAddress() + ".json";
+        Date date = new Date();
+        String stringDate = DateFormat.getDateTimeInstance().format(date);
+        SimpleDateFormat format = new SimpleDateFormat("'UTC--'yyyy-MM-dd'T'HH-mm-ss.nVV'--'");
+        //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
+        //mTimeText.setText("Time: " + dateFormat.format(date));
+        return format.format(date) + walletFile.getAddress() + ".json";
     }
 
     public static String getDefaultKeyDirectory() {
